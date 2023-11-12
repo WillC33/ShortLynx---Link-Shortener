@@ -5,7 +5,7 @@ namespace LinkShortener;
 /// </summary>
 internal class Coordinator(ShortenerService shortener, Repository repository)
 {
-    private const string BaseUrl = "https://shortlynx.site/go/";
+    private const string BaseUrl = "https://shortlynx.azurewebsites.net/go/";
     
     /// <summary>
     /// Shortens and writes a link to the Db
