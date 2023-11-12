@@ -6,7 +6,7 @@ namespace LinkShortener;
 /// </summary>
 internal class Repository
 {
-    private const string ConnexionString = "Data Source=linkShortener.sqlite";
+    private readonly string _connexionString = $"Data Source={AppContext.BaseDirectory}linkShortener.sqlite";
 
     /// <summary>
     /// Write a link to the Db
@@ -17,7 +17,7 @@ internal class Repository
         try
         {
             EnsureTableExists();
-            using var connexion = new SqliteConnection(ConnexionString);
+            using var connexion = new SqliteConnection(_connexionString);
             connexion.Open();
 
             using var command = new SqliteCommand(
@@ -45,7 +45,7 @@ internal class Repository
         try
         {
             EnsureTableExists();
-            using SqliteConnection connexion = new(ConnexionString);
+            using SqliteConnection connexion = new(_connexionString);
             connexion.Open();
 
             using var command = new SqliteCommand(
@@ -70,7 +70,7 @@ internal class Repository
     
     public void EnsureTableExists()
     {
-        using (SqliteConnection connexion = new(ConnexionString))
+        using (SqliteConnection connexion = new(_connexionString))
         {
             connexion.Open();
 
