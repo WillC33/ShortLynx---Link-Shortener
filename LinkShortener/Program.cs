@@ -38,11 +38,7 @@ app.MapGet("/go/{hash}", (string hash, Coordinator coordinator, HttpContext cont
     .WithName("Redirect");
 
 //Shortens a link
-app.MapPost("/shorten", ([FromBody] string link, Coordinator coordinator) =>
-    {
-        var hash = coordinator.WriteLink(link);
-        return $"https://shortlynx.site/go/{hash}";
-    })
+app.MapPost("/shorten", ([FromBody] string link, Coordinator coordinator) => coordinator.WriteLink(link))
     .WithName("Shorten");
 
 app.UseHttpsRedirection();

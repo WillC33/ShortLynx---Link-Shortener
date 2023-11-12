@@ -5,6 +5,8 @@ namespace LinkShortener;
 /// </summary>
 internal class Coordinator(ShortenerService shortener, Repository repository)
 {
+    private const string BaseUrl = "https://shortlynx.site/go/";
+    
     /// <summary>
     /// Shortens and writes a link to the Db
     /// </summary>
@@ -21,7 +23,7 @@ internal class Coordinator(ShortenerService shortener, Repository repository)
         };
         
         repository.WriteLink(model);
-        return hash;
+        return $"{BaseUrl}{hash}";
     }
 
     /// <summary>

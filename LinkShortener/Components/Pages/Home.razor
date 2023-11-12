@@ -1,11 +1,11 @@
 ﻿@page "/"
 @attribute [RenderModeInteractiveServer]
-//inject ILinkShorteningService LinkShorteningService
+@inject Coordinator Coordinator
 
 <div class="container mt-5">
     <div class="card">
         <div class="card-body">
-            <h5 class="card-title">Short Lynx</h5>
+            <h5 class="card-title">ShortLynx</h5>
 
             <form @onsubmit="ShortenLink">
                 <div class="mb-3">
@@ -33,7 +33,6 @@
 
     private async Task ShortenLink()
     {
-        
-        shortenedLink = $"https://shortlynx.site/{originalUrl}";
+        shortenedLink = Coordinator.WriteLink(originalUrl);
     }
 }
