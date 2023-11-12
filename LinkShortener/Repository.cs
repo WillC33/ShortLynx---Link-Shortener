@@ -6,7 +6,7 @@ namespace LinkShortener;
 /// </summary>
 internal class Repository
 {
-    private readonly string _connexionString = $"Data Source={AppContext.BaseDirectory}linkShortener.sqlite";
+    private readonly string _connexionString = $"Data Source=linkShortener.sqlite";
 
     /// <summary>
     /// Write a link to the Db
