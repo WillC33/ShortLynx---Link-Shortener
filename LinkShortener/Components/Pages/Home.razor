@@ -1,0 +1,39 @@
+﻿@page "/"
+@attribute [RenderModeInteractiveServer]
+//inject ILinkShorteningService LinkShorteningService
+
+<div class="container mt-5">
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Short Lynx</h5>
+
+            <form @onsubmit="ShortenLink">
+                <div class="mb-3">
+                    <label for="originalUrl" class="form-label">Enter URL:</label>
+                    <input id="originalUrl" class="form-control" @bind="originalUrl" />
+                </div>
+
+                <button type="submit" class="btn btn-primary">Shorten Link</button>
+            </form>
+
+            @if (!string.IsNullOrEmpty(shortenedLink))
+            {
+                <div class="mt-3">
+                    <p class="card-text">Original URL: @originalUrl</p>
+                    <p class="card-text">Shortened Link: <a href="@shortenedLink" target="_blank">@shortenedLink</a></p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private string originalUrl;
+    private string shortenedLink;
+
+    private async Task ShortenLink()
+    {
+        
+        shortenedLink = $"https://shortlynx.site/{originalUrl}";
+    }
+}
