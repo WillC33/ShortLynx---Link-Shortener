@@ -54,7 +54,7 @@ jobs:
         with:
           app-name: 'ShortLynx'
           slot-name: 'Production'
-          publish-profile: 'dummy'  # Not used when using environment variables
-          package: ${{ runner.workspace }}/.net-app
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2F37C817CA784B67A3E8470FC783F203 }}
+          package: .
           # Add environment variables directly
           app-settings: COSMOSDB_ENDPOINT=${{ secrets.COSMOSDB_ENDPOINT }} COSMOSDB_KEY=${{ secrets.COSMOSDB_KEY }}
