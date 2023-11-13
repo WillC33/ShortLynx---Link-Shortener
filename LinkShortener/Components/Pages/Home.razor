@@ -33,6 +33,6 @@
 
     private async Task ShortenLink()
     {
-        shortenedLink = Coordinator.WriteLink(originalUrl);
+        shortenedLink = await Coordinator.WriteLink(originalUrl);
     }
 }

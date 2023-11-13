@@ -3,7 +3,7 @@ namespace LinkShortener;
 /// <summary>
 /// Coordinates link shortening and reading options
 /// </summary>
-internal class Coordinator(ShortenerService shortener, Repository repository)
+internal class Coordinator(ShortenerService shortener, CosmosRepository repository)
 {
     private const string BaseUrl = "https://shortlynx.azurewebsites.net/go/";
     
@@ -12,17 +12,17 @@ internal class Coordinator(ShortenerService shortener, Repository repository)
     /// </summary>
     /// <param name="link">the link</param>
     /// <returns>the hashed linked</returns>
-    internal string WriteLink(string link)
+    internal async Task<string> WriteLink(string link)
     {
         var hash = shortener.ShortenLink(link);
         
         ShortenedLinkModel model = new()
         {
-            hash = hash,
-            originalLink = link
+            Id = hash,
+            OriginalLink = link
         };
         
-        repository.WriteLink(model);
+        await repository.WriteLink(model);
         return $"{BaseUrl}{hash}";
     }
 
@@ -31,9 +31,9 @@ internal class Coordinator(ShortenerService shortener, Repository repository)
     /// </summary>
     /// <param name="hash">the hash</param>
     /// <returns>the original link</returns>
-    internal string ReadLink(string hash)
+    internal async Task<string> ReadLink(string hash)
     {
-        var model = repository.ReadLink(hash);
-        return model?.originalLink;
+        var model = await repository.ReadLink(hash);
+        return model?.OriginalLink;
     }
 }

@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 //BL services
-builder.Services.AddScoped<Repository>();
+builder.Services.AddScoped<CosmosRepository>();
 builder.Services.AddScoped<ShortenerService>();
 builder.Services.AddScoped<Coordinator>();
 
@@ -23,9 +23,9 @@ if (!app.Environment.IsDevelopment())
 }
 
 //Gets the stored link
-app.MapGet("/go/{hash}", (string hash, Coordinator coordinator, HttpContext context) =>
+app.MapGet("/go/{hash}", async (string hash, Coordinator coordinator, HttpContext context) =>
     {
-        var link = coordinator.ReadLink(hash);
+        var link = await coordinator.ReadLink(hash);
         //TODO: this does not redirect invalid links properly yet, it redirects to blank
         if (link == null) link = "";
 

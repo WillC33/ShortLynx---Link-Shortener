@@ -1,3 +1,5 @@
+using Newtonsoft.Json;
+
 namespace LinkShortener;
 
 /// <summary>
@@ -5,7 +7,8 @@ namespace LinkShortener;
 /// </summary>
 internal record ShortenedLinkModel()
 {
-    internal string hash { get; set; }
-    internal string originalLink { get; set; }
+    [JsonProperty("id")]
+    internal string Id { get; set; }
+    internal string OriginalLink { get; set; }
     
 }

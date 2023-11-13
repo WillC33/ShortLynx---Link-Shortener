@@ -2,11 +2,11 @@ using Microsoft.Data.Sqlite;
 
 namespace LinkShortener;
 /// <summary>
-/// Provides Db operations
+/// The SQLite Db was causing consistent locking issues within prod so this is now deprecated in favour of cosmos
 /// </summary>
-internal class Repository
+internal class SQLiteRepository
 {
-    private readonly string _connexionString = $"Data Source=linkShortener.sqlite";
+    private readonly string _connexionString = "Data Source=linkShortener.sqlite" ;
 
     /// <summary>
     /// Write a link to the Db
@@ -16,18 +16,20 @@ internal class Repository
     {
         try
         {
-            EnsureTableExists();
             using var connexion = new SqliteConnection(_connexionString);
             connexion.Open();
 
-            using var command = new SqliteCommand(
-                "INSERT INTO ShortenedLinks (Hash, OriginalLink) VALUES (@Hash, @OriginalLink);", connexion);
-            
-            command.Parameters.AddWithValue("@Hash", link.hash);
-            command.Parameters.AddWithValue("@OriginalLink", link.originalLink);
-            
-            command.ExecuteNonQuery();
+            using (var command = new SqliteCommand(
+                       "INSERT INTO ShortenedLinks (Id, OriginalLink) VALUES (@Id, @OriginalLink);", connexion))
+            {
+                command.Parameters.AddWithValue("@Hash", link.Id);
+                command.Parameters.AddWithValue("@OriginalLink", link.OriginalLink);
+
+                command.ExecuteNonQuery();
+            }
+
             Console.WriteLine("Link inserted successfully.");
+            connexion.Close();
         }
         catch (Exception ex)
         {
@@ -49,17 +51,17 @@ internal class Repository
             connexion.Open();
 
             using var command = new SqliteCommand(
-                "SELECT * FROM ShortenedLinks WHERE Hash = @Hash;", connexion);
+                "SELECT * FROM ShortenedLinks WHERE Id = @Id;", connexion);
             
-            command.Parameters.AddWithValue("@Hash", hash);
+            command.Parameters.AddWithValue("@Id", hash);
 
             using var reader = command.ExecuteReader();
             if (!reader.Read()) return null;
             
             return new ShortenedLinkModel
             { 
-                hash = reader["Hash"].ToString(), 
-                originalLink = reader["OriginalLink"].ToString()
+                Id = reader["Id"].ToString(), 
+                OriginalLink = reader["OriginalLink"].ToString()
             };
         }
         catch (Exception ex)
@@ -76,7 +78,7 @@ internal class Repository
 
             using (SqliteCommand command = new(
                        @"CREATE TABLE IF NOT EXISTS ShortenedLinks (
-                Hash TEXT PRIMARY KEY,
+                Id TEXT PRIMARY KEY,
                 OriginalLink TEXT NOT NULL
             );", connexion))
             {
