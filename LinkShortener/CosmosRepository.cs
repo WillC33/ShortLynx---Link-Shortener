@@ -15,8 +15,8 @@ internal class CosmosRepository
 
     public CosmosRepository(IConfiguration configuration)
     {
-        _endpointUri = configuration["CosmosDb:Endpoint"];
-        _primaryKey = configuration["CosmosDb:Key"];
+        _endpointUri = configuration["COSMOSDB_ENDPOINT"];
+        _primaryKey = configuration["COSMOSDB_KEY"];
         
         _cosmosClient = new CosmosClient(_endpointUri, _primaryKey);
         
