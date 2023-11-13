@@ -9,6 +9,8 @@ internal record ShortenedLinkModel()
 {
     [JsonProperty("id")]
     internal string Id { get; set; }
+    
+    [JsonProperty("originalLink")]
     internal string OriginalLink { get; set; }
     
 }
