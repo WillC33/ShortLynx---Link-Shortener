@@ -14,7 +14,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
       - name: Set up .NET Core
         uses: actions/setup-dotnet@v1
@@ -39,7 +40,7 @@ jobs:
     needs: build
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
+      url: ${{ secrets.AZURE_WEBAPP_URL }}
 
     steps:
       - name: Download artifact from build job
@@ -53,5 +54,7 @@ jobs:
         with:
           app-name: 'ShortLynx'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_2F37C817CA784B67A3E8470FC783F203 }}
-          package: .
+          publish-profile: 'dummy'  # Not used when using environment variables
+          package: ${{ runner.workspace }}/.net-app
+          # Add environment variables directly
+          app-settings: COSMOSDB_ENDPOINT=${{ secrets.COSMOSDB_ENDPOINT }} COSMOSDB_KEY=${{ secrets.COSMOSDB_KEY }}
